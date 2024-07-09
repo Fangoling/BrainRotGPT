@@ -46,7 +46,7 @@ def json_to_srt(json_file_path, srt_file_path):
             start_time = subtitle['start']
             end_time = subtitle['end'] - 0.003           # -0.003 to ensure that the sutitles dont overlap
             text = subtitle['word']
-            if end_time>=60.00 :
+            if end_time>=180.00 :
                 raise ValueError("Clip size of more than a minute not supported!")
             
             
@@ -135,6 +135,7 @@ def sub_append(font_no, weight=16, color="&H0099ff"):
         file.write(''.join(lines))
     
     system(f'ffmpeg -hide_banner -loglevel error -i tmp/temporary.mp4 -vf "ass=tmp/subtitle.ass" -c:a copy -c:v libx264 -crf 23 -preset veryfast {time_string}.mp4')
+    return time_string
 
 
 def add_aud(videoclip, audioclip):
@@ -249,11 +250,6 @@ def clear():
         system("clear")
 
     print('\033[94m'+'''
-░░      ░░░░      ░░░░      ░░░░      ░░░        ░░        ░░        ░░        ░
-▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒▒▒▒
-▓  ▓▓▓▓▓▓▓▓  ▓▓▓▓  ▓▓▓      ▓▓▓▓      ▓▓▓      ▓▓▓▓▓▓▓  ▓▓▓▓▓▓▓▓  ▓▓▓▓▓      ▓▓▓
-█  ████  ██        ████████  ████████  ██  ███████████  ████████  █████  ███████
-██      ███  ████  ███      ████      ███        █████  ████████  █████        █
                                                                       
 ''')
 
@@ -353,21 +349,14 @@ def process(script, video, voice, font):
 
 
     print('\n'+'[*] Burning Captions\n')
-    sub_append(QueryList["Font"])
+    file =sub_append(QueryList["Font"])
     
     #--
     
     print("\n[*] Job Finished")
-    
-    delr=input("delete all non essential files? (y/n) : ")
-    if delr=="y" : 
-        rmtree("tmp/")
-    if delr=="n" :
-        pass
+    return file
 
-if __name__ == "__main__":
-    _is_main = True
-    main("Hello World", 1, 1, 1)
+
 
 
     
