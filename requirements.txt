@@ -7,3 +7,13 @@ langchain-core
 langchain-openai
 chainlit
 chromadb
+g4f[all]
+pydub
+pillow
+moviepy
+opencv-python
+seewav
+numpy
+pycairo
+tqdm
+assemblyai

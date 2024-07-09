@@ -2,6 +2,8 @@ import chainlit as cl
 from chainlit.types import AskFileResponse
 from langchain_openai import ChatOpenAI
 
+import processing
+
 llm = ChatOpenAI(model_name="gpt-4o", temperature=0, streaming=True, base_url="https://llmproxy.meingpt.com")
 
 welcome_message = """Bitte laden Sie eine VTT-Datei hoch"""
@@ -42,6 +44,8 @@ async def start():
 
     summary = summary_response.content
     print(summary)
+    processing.process(summary, 1, 1, 1)
+
 
     # Send the summary to the user
     await cl.Message(content=f"Meeting Summary:\n\n{summary}").send()
