@@ -37,17 +37,19 @@ async def start():
     # Request a summary from the LLM
     summary_response = llm.invoke(
         [
-        ("system", "You are an assistant who summarizes the content of a video conference.The summary should include only important and business-relevant information, filtering out any trivial details such as someone getting coffee or clearing their throat. The summary should be concise and long enough to take about 30 seconds to read aloud. Der Text soll auf deutsch sein und fließend."),
+        ("system", "You are an assistant who summarizes the content of a video conference.The summary should include only important and business-relevant information, filtering out any trivial details such as someone getting coffee or clearing their throat. The summary should be concise and long enough to take about 30 seconds to read aloud. Language: english"),
         ("human", f"Please summarize the following meeting transcript. :\n\n{meeting_content}")
     ]
     )
 
     summary = summary_response.content
     print(summary)
-    processing.process(summary, 1, 1, 1)
+    path =processing.process(summary, 1, 1, 1)
+    path += ".mp4"
+    elements = [cl.Video(name = "example.mp4", path = path,display = "inline" )]
+    await cl.Message(content = "Here is your video", elements = elements).send()
+    #await cl.Video(name="summry.mp4", path="09_07_2024__180234.mp4").send()
 
 
     # Send the summary to the user
-    await cl.Message(content=f"Meeting Summary:\n\n{summary}").send()
-
-
+    #await cl.Message(content=f"Meeting Summary:\n\n{summary}").send()
